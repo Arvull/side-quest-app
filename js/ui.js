@@ -28,6 +28,7 @@ export const icons = {
   upload: S('<path d="M12 15V5"/><path d="m8 8.5 4-4 4 4"/><path d="M4.5 19.5h15"/>'),
   install: S('<rect x="6" y="2.8" width="12" height="18.4" rx="2.6"/><path d="M11 5.5h2"/><path d="M12 10v5.5"/><path d="m9.8 13.3 2.2 2.2 2.2-2.2"/>'),
   target: S('<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/>'),
+  moon: S('<path d="M20 13.5A8 8 0 1 1 10.5 4a6.6 6.6 0 0 0 9.5 9.5z"/>'),
 };
 
 /* ---------------------------------------------------------------- toast -- */

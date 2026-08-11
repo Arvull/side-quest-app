@@ -6,8 +6,26 @@
 import { esc, icons } from './ui.js';
 import * as store from './store.js';
 import {
-  todayISO, describeDue, describeRepeat, prettyDate, daysBetween, fromISO,
+  todayISO, addDays, describeDue, describeRepeat, prettyDate, daysBetween, fromISO,
 } from './schedule.js';
+
+/**
+ * Every view opens with a greeting, and the theme toggle rides along in its
+ * top-right corner now that the app has no header bar.
+ * `title` and `sub` are trusted HTML — callers escape their own values.
+ */
+function greetingBlock({ eyebrow, title, sub }) {
+  return `
+    <div class="greeting">
+      <div class="greeting__text">
+        ${eyebrow ? `<div class="greeting__eyebrow">${esc(eyebrow)}</div>` : ''}
+        <h1>${title}</h1>
+        ${sub ? `<p>${sub}</p>` : ''}
+      </div>
+      <button class="theme-btn" type="button" data-action="toggle-theme"
+              title="Switch between dawn and dusk" aria-label="Switch theme">${icons.moon}</button>
+    </div>`;
+}
 
 /* ------------------------------------------------------------- fragments -- */
 
@@ -141,6 +159,12 @@ export function today(state) {
   const due = store.dueToday();
   const liveEpics = state.epics.filter((e) => !e.completedAt && e.steps.some((s) => !s.done));
 
+  // The next two days, so nothing lands as a surprise.
+  const horizon = addDays(todayISO(), 2);
+  const soon = state.dailies
+    .filter((q) => q.dueDate > todayISO() && q.dueDate <= horizon)
+    .sort((a, b) => a.dueDate.localeCompare(b.dueDate) || a.title.localeCompare(b.title));
+
   const nextSteps = liveEpics.slice(0, 3).map((epic) => {
     const step = epic.steps.find((s) => !s.done);
     return `
@@ -157,11 +181,13 @@ export function today(state) {
   }).join('');
 
   return `
-    <div class="greeting">
-      <div class="greeting__eyebrow">${esc(prettyDate())}</div>
-      <h1>${greetingLine()}, ${esc(state.profile.name)}.</h1>
-      <p>${due.length ? `${due.length} quest${due.length === 1 ? '' : 's'} waiting for you today.` : 'Your daily quests are all done. Lovely.'}</p>
-    </div>
+    ${greetingBlock({
+      eyebrow: prettyDate(),
+      title: `${greetingLine()}, ${esc(state.profile.name)}.`,
+      sub: due.length
+        ? `${due.length} quest${due.length === 1 ? '' : 's'} waiting for you today.`
+        : 'Your daily quests are all done. Lovely.',
+    })}
 
     ${levelCard(state)}
 
@@ -176,6 +202,15 @@ export function today(state) {
           ? empty('🌾', 'All clear', 'Nothing due today. Rest is part of the quest.', null, null)
           : empty('🧹', 'No daily quests yet', 'Add the small repeating things — the ones you always forget.', 'Add a daily quest', 'new-daily')}
     </section>
+
+    ${soon.length ? `
+    <section class="section">
+      <div class="section__head">
+        <h2>Coming up</h2>
+        <span class="section__count">next two days</span>
+      </div>
+      <div class="quests quests--ahead">${soon.map((q) => dailyItem(q, { showRepeat: false })).join('')}</div>
+    </section>` : ''}
 
     ${nextSteps ? `
     <section class="section">
@@ -196,15 +231,15 @@ export function dailies(state) {
 
   if (!state.dailies.length) {
     return `
-      <div class="greeting"><h1>Daily quests</h1><p>The small, repeating things.</p></div>
+      ${greetingBlock({ title: 'Daily quests', sub: 'The small, repeating things.' })}
       ${empty('🧹', 'Your log is empty', 'Bathroom deep clean, water the plants, wash the bedding — whatever keeps coming back around.', 'Add a daily quest', 'new-daily')}`;
   }
 
   return `
-    <div class="greeting">
-      <h1>Daily quests</h1>
-      <p>${state.dailies.length} in the log · ${due.length} due now</p>
-    </div>
+    ${greetingBlock({
+      title: 'Daily quests',
+      sub: `${state.dailies.length} in the log · ${due.length} due now`,
+    })}
 
     ${due.length ? `
     <section class="section" style="margin-top:6px">
@@ -231,15 +266,15 @@ export function epics(state) {
 
   if (!state.epics.length) {
     return `
-      <div class="greeting"><h1>Epic quests</h1><p>Big goals, broken into steps.</p></div>
+      ${greetingBlock({ title: 'Epic quests', sub: 'Big goals, broken into steps.' })}
       ${empty('🏔️', 'No epics yet', 'Pick something that would genuinely change your year, then break it into sub-quests.', 'Begin an epic quest', 'new-epic')}`;
   }
 
   return `
-    <div class="greeting">
-      <h1>Epic quests</h1>
-      <p>${live.length} in progress${done.length ? ` · ${done.length} completed` : ''}</p>
-    </div>
+    ${greetingBlock({
+      title: 'Epic quests',
+      sub: `${live.length} in progress${done.length ? ` · ${done.length} completed` : ''}`,
+    })}
 
     ${live.map((e) => epicCard(e)).join('')}
 
@@ -262,11 +297,11 @@ export function hearth(state) {
   const recent = state.log.slice(0, 6);
 
   return `
-    <div class="greeting">
-      <div class="greeting__eyebrow">Level ${info.level}</div>
-      <h1>${esc(info.title)}</h1>
-      <p>${state.profile.xp} XP earned since you started.</p>
-    </div>
+    ${greetingBlock({
+      eyebrow: `Level ${info.level}`,
+      title: esc(info.title),
+      sub: `${state.profile.xp} XP earned since you started.`,
+    })}
 
     ${levelCard(state)}
 
