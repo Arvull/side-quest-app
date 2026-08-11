@@ -25,7 +25,7 @@ function uid() {
 function blank() {
   return {
     schema: SCHEMA,
-    profile: { name: 'Adventurer', xp: 0, theme: 'auto', createdAt: new Date().toISOString() },
+    profile: { name: 'Adventurer', xp: 0, theme: 'auto', figure: 'masc', createdAt: new Date().toISOString() },
     dailies: [],
     epics: [],
     log: [],
@@ -312,6 +312,11 @@ export function epicProgress(epic) {
 
 export function setTheme(theme) {
   state.profile.theme = theme;
+  emit();
+}
+
+export function setFigure(figure) {
+  state.profile.figure = figure === 'fem' ? 'fem' : 'masc';
   emit();
 }
 

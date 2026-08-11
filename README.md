@@ -10,7 +10,8 @@ A cosy quest log. Two kinds of quest:
 Everything earns XP, XP earns levels, and levels earn you a slightly grander title — Wanderer at level
 one, Legend of the Hollow at ten. Each rank has its own portrait: the same character throughout, just
 better equipped as you climb, from a commoner in linen to a crowned figure with a halo. The Hearth tab
-shows the whole ladder, with ranks you haven't reached yet greyed out. It is meant to feel like a quest
+shows the whole ladder, with ranks you haven't reached yet greyed out, and a masculine/feminine toggle
+that redraws every portrait. It is meant to feel like a quest
 log in a game, but warm and quiet rather than loud and neon.
 
 Completing a quest takes a short **press and hold** rather than a tap, so a stray thumb on a scrolling

@@ -36,7 +36,7 @@ function levelCard(state) {
     <div class="hero-card">
       <div class="level-row">
         <div class="level-portrait">
-          ${avatar(info.level, 56)}
+          ${avatar(info.level, 56, { figure: state.profile.figure })}
           <span class="level-pip">${info.level}</span>
         </div>
         <div class="level-meta">
@@ -330,12 +330,21 @@ export function hearth(state) {
         <h2>Ranks</h2>
         <span class="section__count">${Math.min(info.level, RANK_COUNT)} of ${RANK_COUNT}</span>
       </div>
+      <div class="figure-pick">
+        ${[['masc', 'Masculine'], ['fem', 'Feminine']].map(([key, label]) => `
+          <button class="figure-opt ${state.profile.figure === key ? 'is-active' : ''}" type="button"
+                  data-action="set-figure" data-figure="${key}"
+                  aria-pressed="${state.profile.figure === key}">
+            ${avatar(info.level, 40, { figure: key })}
+            <span>${label}</span>
+          </button>`).join('')}
+      </div>
       <div class="rank-grid">
         ${store.LEVEL_TITLES.map((title, i) => {
           const lvl = i + 1;
           const earned = info.level >= lvl;
           return `<div class="rank ${earned ? 'is-earned' : ''}">
-            ${avatar(lvl, 52, { muted: !earned })}
+            ${avatar(lvl, 52, { muted: !earned, figure: state.profile.figure })}
             <span class="rank__name">${esc(title)}</span>
           </div>`;
         }).join('')}

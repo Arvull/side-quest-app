@@ -120,6 +120,8 @@ const actions = {
 
   'delete-step': (el, { id, step }) => store.deleteStep(id, step),
 
+  'set-figure': (el, { figure }) => store.setFigure(figure),
+
   install: () => promptInstall(),
   export: () => exportLog(),
   import: () => importLog(),

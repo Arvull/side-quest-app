@@ -39,12 +39,14 @@ let uid = 0;
 /**
  * @param {number} level  1-based; anything above the top tier shows the top tier.
  * @param {number} size   rendered px
- * @param {object} [opts] { muted } draws the locked/not-yet-earned version
+ * @param {object} [opts] { muted, figure } — muted draws the locked version,
+ *                        figure is 'masc' or 'fem' and changes the hair only.
  */
 export function avatar(level, size = 56, opts = {}) {
   const t = Math.min(Math.max(Math.round(level), 1), RANK_COUNT);
   const kit = TIERS[t - 1];
   const m = Boolean(opts.muted);
+  const fem = opts.figure === 'fem';
   const clip = `av${(uid += 1)}`;
 
   const hood = t >= 6;
@@ -101,6 +103,10 @@ export function avatar(level, size = 56, opts = {}) {
   </g>
   ${trim ? `<g fill="${trim}"><circle cx="18" cy="53.6" r="1.5"/><circle cx="46" cy="53.6" r="1.5"/></g>` : ''}` : ''}
 
+  ${fem ? (hat || hood
+    ? `<path d="M14.2 48c-1-4.8-1.5-9.4-1.5-14 0-4.6 1.2-8.6 3.4-11.6 1.4 5.6 7 8.4 15.9 8.4s14.5-2.8 15.9-8.4c2.2 3 3.4 7 3.4 11.6 0 4.6-.5 9.2-1.5 14Z" fill="${hair}"/>`
+    : `<path d="M13.6 48c-1-5.2-1.5-10.2-1.5-15.2C12.1 21.4 20.4 13.6 32 13.6s19.9 7.8 19.9 19.2c0 5-.5 10-1.5 15.2Z" fill="${hair}"/>`) : ''}
+
   <path d="M28.4 38h7.2v7.4a3.6 3.6 0 0 1-7.2 0Z" fill="${skin}"/>
   <circle cx="32" cy="28" r="11.5" fill="${skin}"/>
 
@@ -108,8 +114,10 @@ export function avatar(level, size = 56, opts = {}) {
   <circle cx="36.1" cy="28.4" r="1.35" fill="${ink}"/>
   <path d="M29.2 32.6c1.7 1.6 3.9 1.6 5.6 0" stroke="${ink}" stroke-width="1.35" fill="none" stroke-linecap="round"/>
 
-  ${!hood && !hat ? `<path d="M20.6 28.2c0-7.4 5.1-12.2 11.4-12.2s11.4 4.8 11.4 12.2c-1.3-1-1.9-3.4-2.2-5.1-3.6 2.8-13.6 3.4-17.4.4-.4 1.9-1.7 3.5-3.2 4.7Z" fill="${hair}"/>` : ''}
-  ${hat ? `<path d="M21.8 24.6c.6-5.6 5-9.4 10.2-9.4s9.6 3.8 10.2 9.4c-4-2.6-16.4-2.6-20.4 0Z" fill="${hair}"/>` : ''}
+  ${!hood && !hat ? (fem
+    ? `<path d="M20.4 28.4c0-7.6 5.2-12.6 11.6-12.6s11.6 5 11.6 12.6c-1.4-1.4-2-4-2.3-5.8-3.4 3.4-11.2 4.2-15.6 1.4-.8 2.2-2.6 3.6-5.3 4.4Z" fill="${hair}"/>`
+    : `<path d="M20.6 28.2c0-7.4 5.1-12.2 11.4-12.2s11.4 4.8 11.4 12.2c-1.3-1-1.9-3.4-2.2-5.1-3.6 2.8-13.6 3.4-17.4.4-.4 1.9-1.7 3.5-3.2 4.7Z" fill="${hair}"/>`) : ''}
+  ${hat && !fem ? `<path d="M21.8 24.6c.6-5.6 5-9.4 10.2-9.4s9.6 3.8 10.2 9.4c-4-2.6-16.4-2.6-20.4 0Z" fill="${hair}"/>` : ''}
 
   ${hood ? `<path d="M17.4 36.6c0-11 6.1-18.4 14.6-18.4s14.6 7.4 14.6 18.4c-1.9-8.6-7.4-13.6-14.6-13.6s-12.7 5-14.6 13.6Z" fill="${hoodFill}"/>
   ${trim ? `<path d="M18.4 33.4c2.1-7.1 7.1-11.1 13.6-11.1s11.5 4 13.6 11.1" fill="none" stroke="${trim}" stroke-width="1.4" opacity=".85"/>` : ''}` : ''}
