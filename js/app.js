@@ -160,21 +160,34 @@ document.addEventListener('click', (event) => {
  * feel like a deliberate action instead of a delay.
  */
 const HOLD_MS = 480;
+const SCROLL_SLOP = 10; // px of movement that turns a hold into a scroll
 let holding = null;
 
-function startHold(el) {
+/** The ring that animates for a hold — the card's checkbox when the card itself
+    is the target, otherwise the pressed control. */
+function holdRing(el) {
+  return el.querySelector ? (el.querySelector('.quest__check, .step__check') || el) : el;
+}
+
+function startHold(el, event) {
   releaseHold(true);
-  el.classList.add('is-holding');
+  const ring = holdRing(el);
+  ring.classList.add('is-holding');
+  el.classList.add('is-pressed');
   holding = {
     el,
+    ring,
     at: Date.now(),
+    x: event.clientX,
+    y: event.clientY,
     timer: setTimeout(() => {
-      const target = holding && holding.el;
+      const held = holding;
       holding = null;
-      if (!target) return;
-      target.classList.remove('is-holding');
+      if (!held) return;
+      held.ring.classList.remove('is-holding');
+      held.el.classList.remove('is-pressed');
       if (navigator.vibrate) navigator.vibrate(12);
-      runHoldAction(target);
+      runHoldAction(held.el);
     }, HOLD_MS),
   };
 }
@@ -182,7 +195,8 @@ function startHold(el) {
 function releaseHold(silent) {
   if (!holding) return;
   clearTimeout(holding.timer);
-  holding.el.classList.remove('is-holding');
+  holding.ring.classList.remove('is-holding');
+  holding.el.classList.remove('is-pressed');
   const tooQuick = Date.now() - holding.at < HOLD_MS;
   holding = null;
   if (tooQuick && !silent) toast('Hold to complete');
@@ -196,10 +210,23 @@ function runHoldAction(el) {
 document.addEventListener('pointerdown', (event) => {
   if (event.button > 0) return;
   const el = event.target.closest('[data-hold]');
-  if (el) startHold(el);
+  if (!el) return;
+  // A tappable control inside the card keeps its own behaviour.
+  const inner = event.target.closest('[data-action]');
+  if (inner && el.contains(inner)) return;
+  startHold(el, event);
 });
+
+// Moving means you meant to scroll, not to complete something.
+document.addEventListener('pointermove', (event) => {
+  if (!holding) return;
+  if (Math.abs(event.clientX - holding.x) > SCROLL_SLOP
+    || Math.abs(event.clientY - holding.y) > SCROLL_SLOP) releaseHold(true);
+}, { passive: true });
+
 document.addEventListener('pointerup', () => releaseHold());
 document.addEventListener('pointercancel', () => releaseHold(true));
+document.addEventListener('scroll', () => releaseHold(true), { passive: true, capture: true });
 
 // Keyboard activation is deliberate by nature, so it needs no hold.
 document.addEventListener('keydown', (event) => {

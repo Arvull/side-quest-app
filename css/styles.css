@@ -367,11 +367,22 @@ input, textarea, select { font: inherit; color: inherit; }
 /* Press and hold to complete: the ring fills over the hold, so the wait reads
    as a deliberate action rather than lag. */
 [data-hold] {
-  touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+  /* pan-y so a whole holdable card still scrolls the list under your thumb;
+     the pointermove handler cancels the hold once you've clearly moved. */
+  touch-action: pan-y;
 }
+.quest__check[data-hold], .step__check[data-hold] { touch-action: none; }
+.quest[data-hold], .step[data-hold] { cursor: pointer; }
+
+/* Whole-card press: sinks slightly, so it is obvious the card itself is live. */
+.quest.is-pressed, .step.is-pressed {
+  transform: scale(.985);
+  background: color-mix(in srgb, var(--sage-wash) 45%, var(--surface));
+}
+.quest.is-pressed { box-shadow: var(--shadow-sm); }
 .quest__check, .step__check { position: relative; }
 .quest__check::after, .step__check::after {
   content: "";

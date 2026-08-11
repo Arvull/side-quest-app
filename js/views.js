@@ -62,7 +62,8 @@ function dailyItem(quest, { showRepeat = true } = {}) {
   ].filter(Boolean).join('');
 
   return `
-    <article class="quest ${late ? 'is-overdue' : ''}" data-quest-id="${quest.id}">
+    <article class="quest ${late ? 'is-overdue' : ''}" data-quest-id="${quest.id}"
+             data-hold="complete-daily" data-id="${quest.id}">
       <button class="quest__check" type="button" data-hold="complete-daily" data-id="${quest.id}"
               aria-label="Hold to complete ${esc(quest.title)}">${icons.check}</button>
       <div class="quest__body">
@@ -120,7 +121,8 @@ function epicCard(epic, { expanded = true } = {}) {
       ${expanded ? `
       <div class="epic__steps">
         ${epic.steps.map((step) => `
-          <div class="step ${step.done ? 'is-done' : ''}">
+          <div class="step ${step.done ? 'is-done' : ''}"
+               ${step.done ? '' : `data-hold="toggle-step" data-id="${epic.id}" data-step="${step.id}"`}>
             <button class="step__check" type="button"
                     ${step.done ? `data-action="toggle-step"` : `data-hold="toggle-step"`}
                     data-id="${epic.id}" data-step="${step.id}"
@@ -169,7 +171,8 @@ export function today(state) {
   const nextSteps = liveEpics.slice(0, 3).map((epic) => {
     const step = epic.steps.find((s) => !s.done);
     return `
-      <article class="quest" data-epic-id="${epic.id}">
+      <article class="quest" data-epic-id="${epic.id}"
+               data-hold="toggle-step" data-id="${epic.id}" data-step="${step.id}">
         <button class="step__check" type="button" style="width:30px;height:30px;border-radius:999px;margin-top:1px"
                 data-hold="toggle-step" data-id="${epic.id}" data-step="${step.id}"
                 aria-label="Hold to complete ${esc(step.title)}">${icons.check}</button>

@@ -11,8 +11,9 @@ Everything earns XP, XP earns levels, and levels earn you a slightly grander tit
 like a quest log in a game, but warm and quiet rather than loud and neon.
 
 Completing a quest takes a short **press and hold** rather than a tap, so a stray thumb on a scrolling
-list can't tick anything off. The ring fills as you hold. If something does slip through, the toast
-that follows carries an Undo with a visible countdown.
+list can't tick anything off. Hold anywhere on the quest — the whole card is the target, not just the
+little circle — and the ring fills as you hold. Move your finger and it turns back into a scroll. If
+something does slip through, the toast that follows carries an Undo with a visible countdown.
 
 ## Running it
 
