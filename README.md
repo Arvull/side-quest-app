@@ -10,6 +10,10 @@ A cosy quest log. Two kinds of quest:
 Everything earns XP, XP earns levels, and levels earn you a slightly grander title. It is meant to feel
 like a quest log in a game, but warm and quiet rather than loud and neon.
 
+Completing a quest takes a short **press and hold** rather than a tap, so a stray thumb on a scrolling
+list can't tick anything off. The ring fills as you hold. If something does slip through, the toast
+that follows carries an Undo with a visible countdown.
+
 ## Running it
 
 There is no build step and no dependencies — it is plain HTML, CSS and ES modules. It does need to be
@@ -57,10 +61,15 @@ obvious next thing to add, and would mean a small backend.
 Views re-render wholesale on every state change, and all interaction goes through delegated
 `[data-action]` handlers, so nothing ever needs re-binding.
 
-### Editing the service worker cache
+### Updates
 
-`sw.js` serves cached assets first and refreshes them in the background, so an edit shows up on the
-second reload. If you want it immediately, bump `CACHE` in `sw.js` or hard-reload.
+The installed app keeps itself current. It checks for a new version whenever it comes back to the
+foreground, and when one is waiting it offers a one-tap "Refresh" toast; otherwise the update applies
+silently on the next cold start. Re-adding it to the home screen is never needed for a content update
+— only a change to the *icon* needs that, because iOS bakes the icon in at install time.
+
+When you deploy a change, bump `CACHE` in `sw.js`. That is what tells installed apps a new version
+exists.
 
 ## Ideas for next
 

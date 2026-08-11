@@ -152,6 +152,64 @@ document.addEventListener('click', (event) => {
   if (fn) fn(el, el.dataset);
 });
 
+/* --------------------------------------------------------- hold to finish -- */
+
+/**
+ * Completing a quest takes a short press rather than a tap. A stray thumb on a
+ * scrolling list can't tick anything off, and the filling ring makes the wait
+ * feel like a deliberate action instead of a delay.
+ */
+const HOLD_MS = 480;
+let holding = null;
+
+function startHold(el) {
+  releaseHold(true);
+  el.classList.add('is-holding');
+  holding = {
+    el,
+    at: Date.now(),
+    timer: setTimeout(() => {
+      const target = holding && holding.el;
+      holding = null;
+      if (!target) return;
+      target.classList.remove('is-holding');
+      if (navigator.vibrate) navigator.vibrate(12);
+      runHoldAction(target);
+    }, HOLD_MS),
+  };
+}
+
+function releaseHold(silent) {
+  if (!holding) return;
+  clearTimeout(holding.timer);
+  holding.el.classList.remove('is-holding');
+  const tooQuick = Date.now() - holding.at < HOLD_MS;
+  holding = null;
+  if (tooQuick && !silent) toast('Hold to complete');
+}
+
+function runHoldAction(el) {
+  const fn = actions[el.dataset.hold];
+  if (fn) fn(el, el.dataset);
+}
+
+document.addEventListener('pointerdown', (event) => {
+  if (event.button > 0) return;
+  const el = event.target.closest('[data-hold]');
+  if (el) startHold(el);
+});
+document.addEventListener('pointerup', () => releaseHold());
+document.addEventListener('pointercancel', () => releaseHold(true));
+
+// Keyboard activation is deliberate by nature, so it needs no hold.
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  const el = event.target.closest && event.target.closest('[data-hold]');
+  if (!el) return;
+  event.preventDefault();
+  runHoldAction(el);
+});
+
 // "Add a sub-quest" inputs inside epic cards.
 document.addEventListener('keydown', (event) => {
   const input = event.target.closest('[data-new-step]');
@@ -243,8 +301,54 @@ setInterval(() => {
 }, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
 
+/* ------------------------------------------------------------ self-update -- */
+
+/**
+ * Keeps the installed app current on its own: it checks for a new version
+ * every time you bring the app to the foreground, offers a one-tap refresh
+ * when one is waiting, and applies it silently on the next cold start
+ * regardless. Re-adding to the home screen is never needed.
+ */
+function watchForUpdates(reg) {
+  const offer = (worker) => {
+    toast('A new version is ready', {
+      label: 'Refresh',
+      onClick: () => worker.postMessage({ type: 'SKIP_WAITING' }),
+    });
+  };
+
+  if (reg.waiting) offer(reg.waiting);
+
+  reg.addEventListener('updatefound', () => {
+    const incoming = reg.installing;
+    if (!incoming) return;
+    incoming.addEventListener('statechange', () => {
+      // No controller means this is the very first install, not an update.
+      if (incoming.state === 'installed' && navigator.serviceWorker.controller) offer(incoming);
+    });
+  });
+
+  let lastCheck = 0;
+  const check = () => {
+    if (document.hidden || Date.now() - lastCheck < 60000) return;
+    lastCheck = Date.now();
+    reg.update().catch(() => {});
+  };
+  document.addEventListener('visibilitychange', check);
+  check();
+
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    refreshing = true;
+    location.reload();
+  });
+}
+
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch((err) => console.warn('Offline mode unavailable', err));
+    navigator.serviceWorker.register('sw.js')
+      .then(watchForUpdates)
+      .catch((err) => console.warn('Offline mode unavailable', err));
   });
 }

@@ -364,6 +364,32 @@ input, textarea, select { font: inherit; color: inherit; }
 .quest__check:active { transform: scale(.88); }
 .quest.is-done .quest__check { background: var(--sage); border-color: var(--sage); color: #FFF9EE; }
 
+/* Press and hold to complete: the ring fills over the hold, so the wait reads
+   as a deliberate action rather than lag. */
+[data-hold] {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.quest__check, .step__check { position: relative; }
+.quest__check::after, .step__check::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: var(--sage);
+  transform: scale(0);
+}
+.quest__check.is-holding::after, .step__check.is-holding::after {
+  animation: hold-fill 480ms cubic-bezier(.4, 0, .8, 1) forwards;
+}
+@keyframes hold-fill { to { transform: scale(1); } }
+.quest__check svg, .step__check svg { position: relative; z-index: 1; }
+.quest__check.is-holding, .step__check.is-holding { color: #FFF9EE; border-color: var(--sage); }
+:root[data-theme="dusk"] .quest__check.is-holding,
+:root[data-theme="dusk"] .step__check.is-holding { color: #1E241C; }
+
 .quest__body { flex: 1; min-width: 0; }
 .quest__title {
   font-size: 15.5px;
@@ -761,6 +787,8 @@ input, textarea, select { font: inherit; color: inherit; }
   pointer-events: none;
 }
 .toast {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -777,6 +805,17 @@ input, textarea, select { font: inherit; color: inherit; }
 @keyframes toast-in { from { opacity: 0; transform: translateY(14px) scale(.96); } to { opacity: 1; transform: none; } }
 @keyframes toast-out { to { opacity: 0; transform: translateY(10px) scale(.97); } }
 .toast__text { flex: 1; }
+.toast__bar {
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 2px;
+  width: 100%;
+  transform-origin: left;
+  background: color-mix(in srgb, var(--surface) 45%, transparent);
+  animation: toast-drain var(--dur, 5000ms) linear forwards;
+}
+@keyframes toast-drain { to { transform: scaleX(0); } }
+
 .toast__action {
   padding: 5px 12px;
   border-radius: var(--r-full);

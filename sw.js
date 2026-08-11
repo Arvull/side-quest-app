@@ -1,6 +1,6 @@
 /* Side Quest service worker — cache-first shell so the app opens offline. */
 
-const CACHE = 'side-quest-v4';
+const CACHE = 'side-quest-v5';
 
 const SHELL = [
   './',
@@ -21,11 +21,13 @@ const SHELL = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE)
-      .then((cache) => cache.addAll(SHELL))
-      .then(() => self.skipWaiting())
-  );
+  // Deliberately no skipWaiting here: a new version waits until the page asks
+  // for it, so the running app is never swapped out from under you mid-tap.
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {

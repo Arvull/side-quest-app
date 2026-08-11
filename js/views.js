@@ -63,8 +63,8 @@ function dailyItem(quest, { showRepeat = true } = {}) {
 
   return `
     <article class="quest ${late ? 'is-overdue' : ''}" data-quest-id="${quest.id}">
-      <button class="quest__check" type="button" data-action="complete-daily" data-id="${quest.id}"
-              aria-label="Complete ${esc(quest.title)}">${icons.check}</button>
+      <button class="quest__check" type="button" data-hold="complete-daily" data-id="${quest.id}"
+              aria-label="Hold to complete ${esc(quest.title)}">${icons.check}</button>
       <div class="quest__body">
         <div class="quest__title"><span class="quest__emoji">${quest.icon}</span>${esc(quest.title)}</div>
         ${quest.note ? `<p class="quest__note">${esc(quest.note)}</p>` : ''}
@@ -121,9 +121,10 @@ function epicCard(epic, { expanded = true } = {}) {
       <div class="epic__steps">
         ${epic.steps.map((step) => `
           <div class="step ${step.done ? 'is-done' : ''}">
-            <button class="step__check" type="button" data-action="toggle-step"
+            <button class="step__check" type="button"
+                    ${step.done ? `data-action="toggle-step"` : `data-hold="toggle-step"`}
                     data-id="${epic.id}" data-step="${step.id}"
-                    aria-label="${step.done ? 'Undo' : 'Complete'} ${esc(step.title)}">${icons.check}</button>
+                    aria-label="${step.done ? 'Undo' : 'Hold to complete'} ${esc(step.title)}">${icons.check}</button>
             <span class="step__title">${esc(step.title)}</span>
             <button class="step__del" type="button" data-action="delete-step"
                     data-id="${epic.id}" data-step="${step.id}" aria-label="Remove step">${icons.close}</button>
@@ -170,8 +171,8 @@ export function today(state) {
     return `
       <article class="quest" data-epic-id="${epic.id}">
         <button class="step__check" type="button" style="width:30px;height:30px;border-radius:999px;margin-top:1px"
-                data-action="toggle-step" data-id="${epic.id}" data-step="${step.id}"
-                aria-label="Complete ${esc(step.title)}">${icons.check}</button>
+                data-hold="toggle-step" data-id="${epic.id}" data-step="${step.id}"
+                aria-label="Hold to complete ${esc(step.title)}">${icons.check}</button>
         <div class="quest__body">
           <div class="quest__title"><span class="quest__emoji">${epic.icon}</span>${esc(step.title)}</div>
           <p class="quest__note">Towards “${esc(epic.title)}”</p>

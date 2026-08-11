@@ -35,15 +35,23 @@ export const icons = {
 
 let toastTimer = null;
 
+/** Undo needs a generous, visible window; a plain message can go quietly. */
+const UNDO_MS = 7000;
+const PLAIN_MS = 2800;
+
 export function toast(message, action) {
   const root = document.getElementById('toast-root');
   root.innerHTML = '';
   clearTimeout(toastTimer);
 
+  const life = action ? UNDO_MS : PLAIN_MS;
   const el = document.createElement('div');
   el.className = 'toast';
   el.innerHTML = `<span class="toast__text">${esc(message)}</span>` +
-    (action ? `<button class="toast__action" type="button">${esc(action.label)}</button>` : '');
+    (action
+      ? `<button class="toast__action" type="button">${esc(action.label)}</button>` +
+        `<span class="toast__bar" style="--dur:${life}ms"></span>`
+      : '');
 
   if (action) {
     el.querySelector('.toast__action').addEventListener('click', () => {
@@ -53,7 +61,7 @@ export function toast(message, action) {
   }
 
   root.appendChild(el);
-  toastTimer = setTimeout(() => dismiss(el), action ? 5200 : 2800);
+  toastTimer = setTimeout(() => dismiss(el), life);
 }
 
 function dismiss(el) {
