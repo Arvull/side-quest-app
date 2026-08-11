@@ -299,17 +299,35 @@ input, textarea, select { font: inherit; color: inherit; }
 }
 
 .level-row { display: flex; align-items: center; gap: 13px; }
-.level-badge {
-  flex: none;
-  width: 50px; height: 50px;
+/* Rank portrait, with the level number pinned to its corner. */
+.level-portrait { position: relative; flex: none; width: 56px; height: 56px; }
+.avatar { display: block; border-radius: 50%; }
+.level-portrait .avatar { box-shadow: var(--shadow-sm); }
+.level-pip {
+  position: absolute;
+  right: -4px; bottom: -4px;
+  min-width: 22px; height: 22px;
+  padding: 0 5px;
   display: grid; place-items: center;
-  border-radius: 16px;
+  border-radius: var(--r-full);
   background: linear-gradient(150deg, var(--sage), var(--sage-deep));
   color: #FFF9EE;
   font-family: var(--font-display);
-  font-size: 20px;
-  box-shadow: var(--shadow-sm);
+  font-size: 11.5px; font-weight: 650;
+  border: 2px solid var(--surface);
 }
+
+.rank-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px 8px; }
+.rank { text-align: center; }
+.rank .avatar { margin: 0 auto; }
+.rank__name {
+  display: block;
+  margin-top: 6px;
+  font-size: 10.5px;
+  line-height: 1.25;
+  color: var(--ink-faint);
+}
+.rank.is-earned .rank__name { color: var(--ink-soft); font-weight: 500; }
 .level-meta { min-width: 0; flex: 1; }
 .level-title { font-family: var(--font-display); font-size: 17px; font-weight: 650; letter-spacing: -.02em; }
 .level-sub { font-size: 12.5px; color: var(--ink-soft); }

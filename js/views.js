@@ -4,6 +4,7 @@
  */
 
 import { esc, icons } from './ui.js';
+import { avatar, RANK_COUNT } from './avatar.js';
 import * as store from './store.js';
 import {
   todayISO, addDays, describeDue, describeRepeat, prettyDate, daysBetween, fromISO,
@@ -34,7 +35,10 @@ function levelCard(state) {
   return `
     <div class="hero-card">
       <div class="level-row">
-        <div class="level-badge">${info.level}</div>
+        <div class="level-portrait">
+          ${avatar(info.level, 56)}
+          <span class="level-pip">${info.level}</span>
+        </div>
         <div class="level-meta">
           <div class="level-title">${esc(info.title)}</div>
           <div class="level-sub">${info.into} / ${info.need} XP to level ${info.level + 1}</div>
@@ -318,6 +322,23 @@ export function hearth(state) {
         <div class="stat"><div class="stat__value">${s.bestStreak}</div><div class="stat__label">Longest ever streak</div></div>
         <div class="stat"><div class="stat__value">${s.epicsLive}</div><div class="stat__label">Epics in progress</div></div>
         <div class="stat"><div class="stat__value">${s.epicsDone}</div><div class="stat__label">Epics completed</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__head">
+        <h2>Ranks</h2>
+        <span class="section__count">${Math.min(info.level, RANK_COUNT)} of ${RANK_COUNT}</span>
+      </div>
+      <div class="rank-grid">
+        ${store.LEVEL_TITLES.map((title, i) => {
+          const lvl = i + 1;
+          const earned = info.level >= lvl;
+          return `<div class="rank ${earned ? 'is-earned' : ''}">
+            ${avatar(lvl, 52, { muted: !earned })}
+            <span class="rank__name">${esc(title)}</span>
+          </div>`;
+        }).join('')}
       </div>
     </section>
 

@@ -9,10 +9,9 @@ import { todayISO, addDays, nextDue, daysBetween } from './schedule.js';
 const KEY = 'side-quest/v1';
 const SCHEMA = 1;
 
-/** A knight's progress: village lad at level 1, dragon slayer at level 10. */
 export const LEVEL_TITLES = [
-  'Villager', 'Squire', 'Footman', 'Sworn Sword', 'Knight',
-  'Knight-Errant', 'Champion', 'Banneret', 'Paladin', 'Dragon Slayer',
+  'Wanderer', 'Forager', 'Pathfinder', 'Trailblazer', 'Lanternbearer',
+  'Wayfinder', 'Questkeeper', 'Hearthwarden', 'Storyweaver', 'Legend of the Hollow',
 ];
 
 const listeners = new Set();

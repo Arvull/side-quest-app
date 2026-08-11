@@ -7,8 +7,11 @@ A cosy quest log. Two kinds of quest:
 - **Epic Quests** — big life goals, broken into sub-quests you can actually tick off. A progress ring
   fills as you go, and finishing the last step pays out the full reward.
 
-Everything earns XP, XP earns levels, and levels earn you a slightly grander title. It is meant to feel
-like a quest log in a game, but warm and quiet rather than loud and neon.
+Everything earns XP, XP earns levels, and levels earn you a slightly grander title — Wanderer at level
+one, Legend of the Hollow at ten. Each rank has its own portrait: the same character throughout, just
+better equipped as you climb, from a commoner in linen to a crowned figure with a halo. The Hearth tab
+shows the whole ladder, with ranks you haven't reached yet greyed out. It is meant to feel like a quest
+log in a game, but warm and quiet rather than loud and neon.
 
 Completing a quest takes a short **press and hold** rather than a tap, so a stray thumb on a scrolling
 list can't tick anything off. Hold anywhere on the quest — the whole card is the target, not just the
@@ -56,6 +59,7 @@ obvious next thing to add, and would mean a small backend.
 | `js/views.js` | Renders the four tabs as HTML strings |
 | `js/sheets.js` | Bottom sheets: quest type picker, both editors, confirmations |
 | `js/ui.js` | Icons, escaping, toasts, the sparkle effect |
+| `js/avatar.js` | Rank portraits, drawn as stacked SVG parts rather than ten separate pictures |
 | `js/app.js` | Routing, delegated event handling, theme, install prompt, import/export |
 | `sw.js` | Service worker — cached shell so it opens instantly and works offline |
 
