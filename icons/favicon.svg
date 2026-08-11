@@ -1,13 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="plate" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#6E8B6A"/>
       <stop offset="1" stop-color="#506A4C"/>
     </linearGradient>
   </defs>
-  <rect width="24" height="24" rx="5.6" fill="url(#g)"/>
-  <path fill="#FFF9EE"
-        d="M4.4 7.1c0-2.2.55-2.75 2.75-2.75h9.7c2.2 0 2.75.55 2.75 2.75v3.6c0 4.7-5.05 8.05-7.6 8.85-2.55-.8-7.6-4.15-7.6-8.85V7.1Z"/>
-  <path fill="#E2B042"
-        d="M12 8.15c.26 0 .35 1.8.83 2.32.48.51 2.17.6 2.17.85s-1.69.34-2.17.85c-.48.52-.57 2.32-.83 2.32s-.35-1.8-.83-2.32c-.48-.51-2.17-.6-2.17-.85s1.69-.34 2.17-.85c.48-.52.57-2.32.83-2.32Z"/>
+  <rect width="64" height="64" rx="15" fill="url(#plate)"/>
+
+  <g fill="#E2B042">
+    <rect x="22" y="13.2" width="2.8" height="7.3" rx="1.4"/>
+    <rect x="29.8" y="13.2" width="2.8" height="7.3" rx="1.4"/>
+    <rect x="37.5" y="13.2" width="2.8" height="7.3" rx="1.4"/>
+    <rect x="45.3" y="13.2" width="2.8" height="7.3" rx="1.4"/>
+  </g>
+
+  <rect x="14.5" y="16.5" width="35" height="36" rx="4.3" fill="#FFFBF3"/>
+
+  <g stroke="#E2D6BE" stroke-width="1.6" stroke-linecap="round">
+    <path d="M20.3 39.5h21"/>
+    <path d="M20.3 45.5h13"/>
+  </g>
+
+  <rect x="19.8" y="26" width="9.3" height="9.3" rx="2.8" fill="none" stroke="#6E8B6A" stroke-width="1.9"/>
+  <path d="M21.8 31 24 33.3l6.5-8" fill="none" stroke="#506A4C" stroke-width="3.1"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g transform="translate(35.75 26.25) rotate(38)">
+    <path d="M0 0 4.25-2.13 4.25 2.13Z" fill="#ECCDA5"/>
+    <path d="M0 0 1.63-.81 1.63.81Z" fill="#5A4433"/>
+    <rect x="4.25" y="-2.13" width="16.25" height="4.25" rx="0.8" fill="#D68D4F"/>
+    <rect x="19.75" y="-2.25" width="3.25" height="4.5" rx="1" fill="#E2B042"/>
+    <rect x="22.5" y="-2.13" width="4.25" height="4.25" rx="1.9" fill="#C87868"/>
+  </g>
 </svg>
