@@ -131,7 +131,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 650; letter-spac
 h1 { letter-spacing: -.032em; }
 p { margin: 0; }
 
-button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+/* padding: 0 matters — the UA's default button padding (1px 6px) squeezes
+   centred icons off-centre inside fixed-size round buttons. */
+button { font: inherit; color: inherit; border: 0; padding: 0; background: none; cursor: pointer; }
 input, textarea, select { font: inherit; color: inherit; }
 
 /* --------------------------------------------------------------- layout -- */
