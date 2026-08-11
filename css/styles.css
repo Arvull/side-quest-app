@@ -554,6 +554,14 @@ input, textarea, select { font: inherit; color: inherit; }
   background-size: 17px;
   padding-right: 40px;
 }
+/* iOS Safari zooms the page whenever you focus a field smaller than 16px, and
+   it never zooms back out when the keyboard goes away. 16px on touch devices
+   is the only reliable cure; pointer coarse keeps the tighter desktop sizes. */
+@media (pointer: coarse) {
+  .input, .textarea, .select, .step-add input { font-size: 16px; }
+  .step-add input { padding: 10px 12px; }
+}
+
 .field__row { display: flex; gap: 11px; }
 .field__row > * { flex: 1; }
 

@@ -1,6 +1,6 @@
 /* Side Quest service worker — cache-first shell so the app opens offline. */
 
-const CACHE = 'side-quest-v2';
+const CACHE = 'side-quest-v3';
 
 const SHELL = [
   './',
