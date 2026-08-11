@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Side Quest</title>
+<meta name="description" content="A cosy quest log for daily chores and big life goals." />
+
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#F6EEE3" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#1E1A18" media="(prefers-color-scheme: dark)" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Side Quest" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml" />
+
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="shell">
+    <!-- Desktop rail / mobile top bar -->
+    <header class="topbar">
+      <div class="topbar__brand">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5l2.2 5.6 5.8.4-4.5 3.8 1.5 5.7L12 14.9 6.9 18l1.6-5.7L4 8.5l5.8-.4L12 2.5z" fill="currentColor"/></svg>
+        </span>
+        <span class="topbar__title">Side Quest</span>
+      </div>
+      <button class="icon-btn" data-action="toggle-theme" title="Switch between dawn and dusk" aria-label="Switch theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M20 13.5A8 8 0 1 1 10.5 4a6.6 6.6 0 0 0 9.5 9.5z"/></svg>
+      </button>
+    </header>
+
+    <main id="view" class="view" tabindex="-1"></main>
+
+    <nav class="tabbar" id="tabbar" aria-label="Main">
+      <button class="tab" data-tab="today">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.75 20v-5.25h4.5V20"/></svg>
+        <span>Today</span>
+      </button>
+      <button class="tab" data-tab="dailies">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3.2v3.4M16 3.2v3.4M3.5 10h17"/><path d="m9 14.6 2 2 4-4"/></svg>
+        <span>Dailies</span>
+      </button>
+      <button class="tab tab--add" data-action="quick-add" aria-label="New quest">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5.5v13M5.5 12h13"/></svg>
+      </button>
+      <button class="tab" data-tab="epics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4.2"/><path d="M6 4.6c3.6-1.9 6.4 1.9 10 0v8.6c-3.6 1.9-6.4-1.9-10 0z"/></svg>
+        <span>Epics</span>
+      </button>
+      <button class="tab" data-tab="hearth">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4.2-2.3 6.5-5.2 6.5-8.4A6.5 6.5 0 0 0 12 6.1a6.5 6.5 0 0 0-6.5 6.5C5.5 15.8 7.8 18.7 12 21z"/><path d="M12 17.2c1.9-1.1 2.9-2.4 2.9-3.9A2.9 2.9 0 0 0 12 10.4a2.9 2.9 0 0 0-2.9 2.9c0 1.5 1 2.8 2.9 3.9z"/></svg>
+        <span>Hearth</span>
+      </button>
+    </nav>
+  </div>
+
+  <div id="sheet-root"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+  <div id="spark-root" class="spark-root" aria-hidden="true"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
